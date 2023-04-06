@@ -1,4 +1,42 @@
 \section*{Activities}
 \begin{enumerate}
-    \item By using the command \texttt{nmap 192.168.56.0/24}
+    \item By using the command \texttt{nmap -sn -n 192.168.56.0/24} you can scan all hosts (no DNS or ports). This returned that only 2 hosts were up, \texttt{192.168.56.3} and \texttt{192.168.56.4}.
+    \item As we now the IP from our machine is \texttt{192.168.56.4}, \texttt{192.168.56.3} should be the other Metaexploitable machine.\\
+    By using \texttt{sudo nmap -n -sS 192.168.56.3} we can scan all ports on that machine using the TCP SYN technique. The open ports were as follows:\\
+    \begin{table}[!h]
+        \centering
+        \begin{tabular}{|c|c||c|c||c|c||c|c|}
+        \hline
+        \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} \\ \hline
+        21/tcp        & ftp              & 22/tcp        & ssh              & 23/tcp        & telnet           & 25/tcp        & smtp             \\ \hline
+        53/tcp        & domain           & 80/tcp        & http             & 111/tcp       & rpcbind          & 139/tcp       & netbios-ssn      \\ \hline
+        445/tcp       & microsoft-ds     & 512/tcp       & exec             & 513/tcp       & login            & 514/tcp       & shell            \\ \hline
+        1099/tcp      & rmiregistry      & 1524/tcp      & ingreslock       & 2049/tcp      & nfs              & 2121/tcp      & ccproxy-ftp      \\ \hline
+        3306/tcp      & mysql            & 5432/tcp      & postgresql       & 5900/tcp      & vnc              & 6000/tcp      & X11              \\ \hline
+        6667/tcp      & irc              & 8009/tcp      & ajp13            & 8180/tcp      & unknown          &               &                  \\ \hline
+        \end{tabular}
+    \end{table}
+
+    I also performed an UPD port scan with \texttt{sudo nmap -n -sU 192.168.56.3}, with the following results:
+    \begin{table}[!h]
+        \centering
+        \begin{tabular}{|c|c|c||c|c|c|}
+        \hline
+        \textbf{Port} & \textbf{State} & \textbf{Service} & \textbf{Port} & \textbf{State} & \textbf{Service} \\ \hline
+        53/udp        & open           & domain           & 137/udp       & open           & netbios-ns       \\ \hline
+        68/udp        & open/filtered  & dhcp             & 138/udp       & open/filtered  & netbios-dgm      \\ \hline
+        69/udp        & open/filtered  & tftp             & 2049/udp      & open           & nfs              \\ \hline
+        111/udp       & open           & rpcbind          &               &                &                  \\ \hline
+        \end{tabular}
+        \end{table}
+
+    \item By using \texttt{nmap -n -O 192.168.56.3} we can check for the OS.\\
+    The results were:
+    \begin{verbatim}
+    Running: Linux 2.6.X
+    OS CPE: cpe:/o:linux:linux_kernel:2.6
+    OS details: Linux 2.6.9 - 2.6.33
+    \end{verbatim}
+
+
 \end{enumerate}
