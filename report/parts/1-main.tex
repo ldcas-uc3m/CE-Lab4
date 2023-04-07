@@ -1,42 +1,109 @@
 \section*{Activities}
 \begin{enumerate}
-    \item By using the command \texttt{nmap -sn -n 192.168.56.0/24} you can scan all hosts (no DNS or ports). This returned that only 2 hosts were up, \texttt{192.168.56.3} and \texttt{192.168.56.4}.
+
+    % Activity 1
+    \item By using the command \texttt{nmap -sn 192.168.56.0/24} you can scan all hosts (no ports). This returned that only 2 hosts were up, \texttt{192.168.56.3} and \texttt{192.168.56.4}.
+
+
+    % Activity 2
     \item As we now the IP from our machine is \texttt{192.168.56.4}, \texttt{192.168.56.3} should be the other Metaexploitable machine.\\
-    By using \texttt{sudo nmap -n -sS 192.168.56.3} we can scan all ports on that machine using the TCP SYN technique. The open ports were as follows:\\
+    By using \texttt{sudo nmap -sS 192.168.56.3} we can scan all ports on that machine using the TCP SYN technique. The open ports were as follows:\\
     \begin{table}[!h]
         \centering
         \begin{tabular}{|c|c||c|c||c|c||c|c|}
-        \hline
-        \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} \\ \hline
-        21/tcp        & ftp              & 22/tcp        & ssh              & 23/tcp        & telnet           & 25/tcp        & smtp             \\ \hline
-        53/tcp        & domain           & 80/tcp        & http             & 111/tcp       & rpcbind          & 139/tcp       & netbios-ssn      \\ \hline
-        445/tcp       & microsoft-ds     & 512/tcp       & exec             & 513/tcp       & login            & 514/tcp       & shell            \\ \hline
-        1099/tcp      & rmiregistry      & 1524/tcp      & ingreslock       & 2049/tcp      & nfs              & 2121/tcp      & ccproxy-ftp      \\ \hline
-        3306/tcp      & mysql            & 5432/tcp      & postgresql       & 5900/tcp      & vnc              & 6000/tcp      & X11              \\ \hline
-        6667/tcp      & irc              & 8009/tcp      & ajp13            & 8180/tcp      & unknown          &               &                  \\ \hline
+            \hline
+            \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} & \textbf{Port} & \textbf{Service} \\ \hline
+            21/tcp        & ftp              & 22/tcp        & ssh              & 23/tcp        & telnet           & 25/tcp        & smtp             \\ \hline
+            53/tcp        & domain           & 80/tcp        & http             & 111/tcp       & rpcbind          & 139/tcp       & netbios-ssn      \\ \hline
+            445/tcp       & microsoft-ds     & 512/tcp       & exec             & 513/tcp       & login            & 514/tcp       & shell            \\ \hline
+            1099/tcp      & rmiregistry      & 1524/tcp      & ingreslock       & 2049/tcp      & nfs              & 2121/tcp      & ccproxy-ftp      \\ \hline
+            3306/tcp      & mysql            & 5432/tcp      & postgresql       & 5900/tcp      & vnc              & 6000/tcp      & X11              \\ \hline
+            6667/tcp      & irc              & 8009/tcp      & ajp13            & 8180/tcp      & unknown          &               &                  \\ \hline
         \end{tabular}
     \end{table}
-
-    I also performed an UPD port scan with \texttt{sudo nmap -n -sU 192.168.56.3}, with the following results:
+    
+    I also performed an UPD port scan with \texttt{sudo nmap -sU 192.168.56.3}, with the following results:
     \begin{table}[!h]
         \centering
         \begin{tabular}{|c|c|c||c|c|c|}
-        \hline
-        \textbf{Port} & \textbf{State} & \textbf{Service} & \textbf{Port} & \textbf{State} & \textbf{Service} \\ \hline
-        53/udp        & open           & domain           & 137/udp       & open           & netbios-ns       \\ \hline
-        68/udp        & open/filtered  & dhcp             & 138/udp       & open/filtered  & netbios-dgm      \\ \hline
-        69/udp        & open/filtered  & tftp             & 2049/udp      & open           & nfs              \\ \hline
-        111/udp       & open           & rpcbind          &               &                &                  \\ \hline
+            \hline
+            \textbf{Port} & \textbf{State} & \textbf{Service} & \textbf{Port} & \textbf{State} & \textbf{Service} \\ \hline
+            53/udp        & open           & domain           & 137/udp       & open           & netbios-ns       \\ \hline
+            68/udp        & open/filtered  & dhcp             & 138/udp       & open/filtered  & netbios-dgm      \\ \hline
+            69/udp        & open/filtered  & tftp             & 2049/udp      & open           & nfs              \\ \hline
+            111/udp       & open           & rpcbind          &               &                &                  \\ \hline
         \end{tabular}
-        \end{table}
+    \end{table}
+    
 
+    % Activity 3
     \item By using \texttt{nmap -n -O 192.168.56.3} we can check for the OS.\\
     The results were:
     \begin{verbatim}
-    Running: Linux 2.6.X
-    OS CPE: cpe:/o:linux:linux_kernel:2.6
-    OS details: Linux 2.6.9 - 2.6.33
+        Running: Linux 2.6.X
+        OS CPE: cpe:/o:linux:linux_kernel:2.6
+        OS details: Linux 2.6.9 - 2.6.33
     \end{verbatim}
+    
 
+    % Activity 4
+    \item By using \texttt{nmap -sV -p T:<ports> 192.168.56.3} we can probe the specific TCP ports we determined as open, as well as their versions. For UDP, it's similar: \texttt{nmap -sU -p U:<ports> 192.168.56.3}\\
+    The results (compared to those on Activity 2) were the following:\newline
+
+    Most of the ports were the same, except ports \texttt{1099/tcp}, where we found the RMI was a Java based one, we found a bindshell at \texttt{1524/tcp}, and a webpage at \texttt{8180/tcp}.
+    \begin{table}[!h]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Port} & \textbf{Old Service} & \textbf{New Service} & \textbf{Version} \\ \hline
+            21/tcp        & ftp                    & ftp                    & vsftpd 2.3.4 \\ \hline
+            22/tcp        & ssh                    & ssh                    & OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0) \\ \hline
+            23/tcp        & telnet                 & telnet                 & Linux telnetd \\ \hline
+            25/tcp        & smtp                   & smtp                   & Postfix smtpd \\ \hline
+            53/tcp        & domain                 & domain                 & ISC BIND 9.4.2 \\ \hline
+            53/udp        & domain                 & domain                 & - \\ \hline
+            68/udp        & dhcp                   & dhcpc                  & - \\ \hline
+            69/udp        & tftp                   & tftp                   & - \\ \hline
+            80/tcp        & http                   & http                   & Apache httpd 2.2.8 ((Ubuntu) DAV/2) \\ \hline
+            111/tcp       & rpcbind                & rpcbind                & 2 (RPC \#100000) \\ \hline
+            111/udp       & rpcbind                & rpcbind                & - \\ \hline
+            137/udp       & netbios-ns             & netbios-ns             & - \\ \hline
+            138/udp       & netbios-dgm            & netbios-dgm            & - \\ \hline
+            139/tcp       & netbios-ssn            & netbios-ssn            & Samba smbd 3.X - 4.X (workgroup: WORKGROUP) \\ \hline
+            445/tcp       & microsoft-ds           & \textbf{netbios-ssn}   & Samba smbd 3.X - 4.X (workgroup: WORKGROUP) \\ \hline
+            512/tcp       & exec                   & exec                   & netkit-rsh rexecd \\ \hline
+            513/tcp       & login                  & login                  & OpenBSD or Solaris rlogind \\ \hline
+            514/tcp       & shell                  & shell                  & Netkit rshd \\ \hline
+            1099/tcp      & rmiregistry            & \textbf{java-rmi}      & GNU Classpath grmiregistry \\ \hline
+            1524/tcp      & ingreslock             & \textbf{bindshell}     & Metasploitable root shell \\ \hline
+            2049/tcp      & nfs                    & nfs                    & 2-4 (RPC \#100003) \\ \hline
+            2049/udp      & nfs                    & nfs                    & - \\ \hline
+            2121/tcp      & ccproxy-ftp            & \textbf{ftp}           & ProFTPD 1.3.1 \\ \hline
+            3306/tcp      & mysql                  & mysql                  & MySQL 5.0.51a-3ubuntu5 \\ \hline
+            5432/tcp      & postgresql             & postgresql             & PostgreSQL DB 8.3.0 - 8.3.7 \\ \hline
+            5900/tcp      & vnc                    & vnc                    & VNC (protocol 3.3) \\ \hline
+            6000/tcp      & X11                    & X11                    & (access denied) \\ \hline
+            6667/tcp      & irc                    & irc                    & UnrealIRCd \\ \hline
+            8009/tcp      & ajp13                  & ajp13                  & Apache Jserv (Protocol v1.3) \\ \hline
+            8180/tcp      & unknown                & \textbf{http}                   & Apache Tomcat/Coyote JSP engine 1.1 \\ \hline
+        \end{tabular}
+    \end{table}
+    
+
+    % Activity 5
+    \item By using \texttt{nc 192.168.56.3 1524} you can connect to the afformentioned Bind Shell, logging in as root.\newline
+    
+    In the folder \texttt{/home/msfadmin/vulnerable} you can find a lot of keys and passwords, as shown here:
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Location} & \textbf{Password} & \textbf{Description} \\ \hline
+                          &                   &                      \\ \hline
+                          &                   &                      \\ \hline
+                          &                   &                      \\ \hline
+                          &                   &                      \\ \hline
+        \end{tabular}
+    \end{table}
 
 \end{enumerate}
