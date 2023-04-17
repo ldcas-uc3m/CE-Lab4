@@ -42,8 +42,9 @@ Note that you can use any other Linux distro, just make sure you install [`nmap`
 5. Run both machines and check their IPs with `ifconfig`. Remember you can change the keyboard layout in `Settings` > `Keyboard` > `Layout`.
 6. Check the machines reach each other by performing a `ping` from one machine to the other.
 
-In order to perform all the steps, run the [`src/script.sh`](src/script.sh) script in the kali machine.
+In order to perform all the steps, run the [`src/script.sh`](src/script.sh) script in the kali machine. Do it step by step, not running the whole script at once.
 
 
 ## More information
-- Get familiar with the free [nmap book](https://nmap.org/book/toc.html).
+- Get familiar with the free [nmap book](https://nmap.org/book/toc.html)
+- You might need to review password cracking from [Lab 1](https://github.com/ldcas-uc3m/CE-Lab1)
